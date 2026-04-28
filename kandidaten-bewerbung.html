@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Record einreichen — alleyoop SaaS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #050505;
+  --bg2:        #0a0a0f;
+  --bg3:        #0f0f1a;
+  --surface:    rgba(255,255,255,0.04);
+  --surface2:   rgba(255,255,255,0.07);
+  --border:     rgba(255,255,255,0.08);
+  --border2:    rgba(255,255,255,0.14);
+  --text:       #f0f0f5;
+  --text2:      #8888aa;
+  --text3:      #555570;
+  --accent:     #00e5ff;
+  --accent2:    #00ff88;
+  --accent3:    #7b61ff;
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --radius:     12px;
+  --radius-lg:  20px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* Noise overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* Grid bg */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: rgba(5,5,5,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--accent); }
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--text); }
+
+/* MAIN LAYOUT */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 120px 40px 80px;
+}
+
+/* HEADER */
+.page-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,255,136,0.08);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 24px;
+}
+.dot-green {
+  width: 6px; height: 6px;
+  background: var(--accent2);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(1.3); }
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+.page-title .hl { color: var(--accent2); }
+
+.page-sub {
+  font-size: 17px;
+  color: var(--text2);
+  font-weight: 300;
+  max-width: 520px;
+  line-height: 1.65;
+  margin-bottom: 56px;
+}
+
+/* FORM CARD */
+.form-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border2);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+/* Progress bar */
+.form-progress {
+  height: 3px;
+  background: var(--border);
+}
+.form-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  border-radius: 0 3px 3px 0;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* Section headers inside form */
+.form-section {
+  padding: 32px 36px;
+  border-bottom: 1px solid var(--border);
+}
+.form-section:last-of-type { border-bottom: none; }
+
+.form-section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+.form-section-label .num {
+  width: 22px; height: 22px;
+  background: rgba(0,229,255,0.1);
+  border: 1px solid rgba(0,229,255,0.25);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  color: var(--accent);
+}
+
+/* Grid layouts for fields */
+.field-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.field-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.field-full { grid-column: 1 / -1; }
+
+/* Field wrapper */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text2);
+  text-transform: uppercase;
+}
+label .req { color: var(--accent); margin-left: 2px; }
+
+/* Input styles */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text);
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  outline: none;
+  width: 100%;
+  -webkit-appearance: none;
+}
+input::placeholder, textarea::placeholder { color: var(--text3); }
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555570' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+select option { background: #0a0a0f; color: var(--text); }
+
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(0,229,255,0.4);
+  background: rgba(0,229,255,0.04);
+  box-shadow: 0 0 0 3px rgba(0,229,255,0.08);
+}
+
+textarea { resize: vertical; min-height: 100px; }
+
+/* Quota input with % suffix */
+.input-suffix-wrap {
+  position: relative;
+}
+.input-suffix-wrap input { padding-right: 44px; }
+.input-suffix {
+  position: absolute;
+  right: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; color: var(--text3); pointer-events: none;
+  font-weight: 600;
+}
+
+/* Rarity select chips */
+.rarity-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.rarity-chip {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text3);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-body);
+}
+.rarity-chip:hover { border-color: var(--border2); color: var(--text2); }
+.rarity-chip.selected-common   { background:rgba(100,116,139,0.15); border-color:rgba(100,116,139,0.5); color:#94a3b8; }
+.rarity-chip.selected-rare     { background:rgba(0,229,255,0.1);    border-color:rgba(0,229,255,0.4);    color:#00e5ff; }
+.rarity-chip.selected-epic     { background:rgba(168,85,247,0.1);   border-color:rgba(168,85,247,0.4);   color:#a855f7; }
+.rarity-chip.selected-legendary{ background:rgba(245,158,11,0.12);  border-color:rgba(245,158,11,0.4);   color:#f59e0b; }
+
+/* File upload zone */
+.file-drop-zone {
+  border: 1.5px dashed var(--border2);
+  border-radius: 14px;
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  background: rgba(255,255,255,0.02);
+}
+.file-drop-zone:hover, .file-drop-zone.dragover {
+  border-color: rgba(0,229,255,0.4);
+  background: rgba(0,229,255,0.04);
+}
+.file-drop-zone input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  border: none; background: none; padding: 0;
+}
+.file-drop-zone input[type="file"]:focus { box-shadow: none; }
+.drop-icon { font-size: 32px; margin-bottom: 10px; }
+.drop-title {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+}
+.drop-sub { font-size: 13px; color: var(--text3); }
+.drop-sub span { color: var(--accent); font-weight: 600; }
+
+/* File list */
+.file-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0,229,255,0.06);
+  border: 1px solid rgba(0,229,255,0.15);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.file-item-name {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--text2);
+}
+.file-item-name .icon { font-size: 16px; }
+.file-remove {
+  background: none; border: none;
+  color: var(--text3); cursor: pointer;
+  font-size: 16px; padding: 0 4px;
+  transition: color 0.2s;
+}
+.file-remove:hover { color: #ef4444; }
+
+/* Consent checkbox */
+.consent-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 4px;
+}
+.consent-row input[type="checkbox"] {
+  width: 18px; height: 18px;
+  flex-shrink: 0; margin-top: 3px;
+  accent-color: var(--accent2);
+  cursor: pointer;
+  border-radius: 4px;
+}
+.consent-text {
+  font-size: 13px;
+  color: var(--text3);
+  line-height: 1.6;
+}
+.consent-text a { color: var(--text2); text-decoration: underline; }
+
+/* Submit area */
+.form-submit-area {
+  padding: 28px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--accent2);
+  color: #000;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 16px;
+  padding: 18px 48px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(0,255,136,0.3), 0 10px 30px rgba(0,0,0,0.4);
+}
+.btn-submit:disabled {
+  opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none;
+}
+.btn-submit .spinner {
+  display: none;
+  width: 18px; height: 18px;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.submit-note {
+  font-size: 12px; color: var(--text3); text-align: center;
+}
+.submit-note span { color: var(--text2); }
+
+/* SUCCESS STATE */
+.success-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5,5,5,0.95);
+  backdrop-filter: blur(20px);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 40px;
+}
+.success-overlay.active { display: flex; }
+.success-icon {
+  width: 80px; height: 80px;
+  background: rgba(0,255,136,0.1);
+  border: 2px solid rgba(0,255,136,0.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  margin-bottom: 28px;
+  animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes scaleIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.success-title {
+  font-family: var(--font-display);
+  font-size: 44px; font-weight: 800;
+  letter-spacing: -2px; margin-bottom: 16px;
+}
+.success-title span { color: var(--accent2); }
+.success-sub {
+  font-size: 18px; color: var(--text2);
+  font-weight: 300; max-width: 440px;
+  margin-bottom: 36px; line-height: 1.6;
+}
+.btn-back {
+  background: var(--surface2);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600; font-size: 15px;
+  padding: 14px 32px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  cursor: pointer; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-back:hover { background: rgba(255,255,255,0.1); }
+
+/* Error message */
+.field-error {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 2px;
+  display: none;
+}
+.field.has-error input,
+.field.has-error select,
+.field.has-error textarea {
+  border-color: rgba(239,68,68,0.5);
+}
+.field.has-error .field-error { display: block; }
+
+/* MOBILE */
+@media (max-width: 680px) {
+  nav { padding: 14px 20px; }
+  main { padding: 90px 20px 60px; }
+  .form-section { padding: 24px 20px; }
+  .field-grid-2, .field-grid-3 { grid-template-columns: 1fr; }
+  .form-submit-area { padding: 20px 20px 28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-icon">⚡</div>
+  <h2 class="success-title">Du bist <span>drin</span>.</h2>
+  <p class="success-sub">Ich habe deinen Track Record erhalten und melde mich bei dir — wenn du ein echter Match für mein Netzwerk bist.</p>
+  <a href="index.html" class="btn-back">← Zurück zur Hauptseite</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">alleyoop <span>SaaS</span></a>
+  <a href="index.html" class="back-link">← Zurück</a>
+</nav>
+
+<main>
+  <!-- Page header -->
+  <div class="page-eyebrow">
+    <span class="dot-green"></span>
+    Für Kandidaten
+  </div>
+  <h1 class="page-title">Dein Track Record.<br><span class="hl">Deine Karte.</span></h1>
+  <p class="page-sub">Füll das Formular aus, hänge deinen Nachweis an. Ich prüfe jeden Eintrag persönlich — du hörst von mir, wenn du ein echter Match bist.</p>
+
+  <!-- =============================================
+       FORM — powered by Formspree
+       SETUP: Ersetze "DEINE_FORMSPREE_ID" mit deiner
+       echten Formspree Form-ID (z.B. xpwzgkdo)
+       Kostenloser Account auf formspree.io
+       ============================================= -->
+  <form
+    id="kandidaten-form"
+    action="https://formspree.io/f/DEINE_FORMSPREE_ID"
+    method="POST"
+    enctype="multipart/form-data"
+    novalidate
+  >
+
+    <!-- PROGRESS BAR -->
+    <div class="form-card">
+      <div class="form-progress">
+        <div class="form-progress-fill" id="progress-fill"></div>
+      </div>
+
+      <!-- ── SECTION 1: PERSÖNLICHES ── -->
+      <div class="form-section">
+        <div class="form-section-label">
+          <span class="num">1</span>
+          Persönliche Infos
+        </div>
+        <div class="field-grid-2">
+          <div class="field" id="field-name">
+            <label>Vollständiger Name <span class="req">*</span></label>
+            <input type="text" name="name" placeholder="Max Mustermann" required>
+            <span class="field-error">Bitte gib deinen Namen an.</span>
+          </div>
+          <div class="field" id="field-email">
+            <label>E-Mail-Adresse <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="max@email.com" required>
+            <span class="field-error">Bitte gib eine gültige E-Mail an.</span>
+          </div>
+          <div class="field">
+            <label>LinkedIn-Profil</label>
+            <input type="text" name="linkedin" placeholder="linkedin.com/in/max-mustermann">
+          </div>
+          <div class="field">
+            <label>Telefon / WhatsApp</label>
+            <input type="tel" name="phone" placeholder="+49 170 000 0000">
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 2: ROLLE & ERFAHRUNG ── -->
+      <div class="form-section">
+        <div class="form-section-label">
+          <span class="num">2</span>
+          Rolle & Erfahrung
+        </div>
+        <div class="field-grid-2">
+          <div class="field" id="field-role">
+            <label>Aktuelle / angestrebte Rolle <span class="req">*</span></label>
+            <select name="rolle" required>
+              <option value="" disabled selected>Rolle auswählen…</option>
+              <option>Account Executive (AE)</option>
+              <option>Senior Account Executive</option>
+              <option>Enterprise Account Executive</option>
+              <option>Customer Success Manager (CSM)</option>
+              <option>Senior CSM</option>
+              <option>SDR / BDR</option>
+              <option>SDR Team Lead</option>
+              <option>Head of Sales</option>
+              <option>VP Sales</option>
+              <option>Sales Engineer</option>
+              <option>Sonstiges</option>
+            </select>
+            <span class="field-error">Bitte wähle eine Rolle.</span>
+          </div>
+          <div class="field">
+            <label>Jahre Erfahrung im SaaS-Sales <span class="req">*</span></label>
+            <select name="erfahrung_jahre" required>
+              <option value="" disabled selected>Auswählen…</option>
+              <option>1–2 Jahre</option>
+              <option>3–4 Jahre</option>
+              <option>5–6 Jahre</option>
+              <option>7–9 Jahre</option>
+              <option>10+ Jahre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Ziel-Segment <span class="req">*</span></label>
+            <select name="segment" required>
+              <option value="" disabled selected>Segment…</option>
+              <option>SMB (bis 200 MA)</option>
+              <option>Mid-Market (200–2.000 MA)</option>
+              <option>Enterprise (2.000+ MA)</option>
+              <option>Strategic / Key Accounts</option>
+              <option>SMB & Mid-Market</option>
+              <option>Mid-Market & Enterprise</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Branchen-Fokus / Vertikal</label>
+            <input type="text" name="vertikal" placeholder="z.B. FinTech, HealthTech, HRTech…">
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 3: PERFORMANCE DATEN ── -->
+      <div class="form-section">
+        <div class="form-section-label">
+          <span class="num">3</span>
+          Performance-Daten
+        </div>
+        <div class="field-grid-3">
+          <div class="field" id="field-quota">
+            <label>Ø Quota Attainment (3 J.) <span class="req">*</span></label>
+            <div class="input-suffix-wrap">
+              <input type="text" name="quota_attainment" placeholder="z.B. 118" required>
+              <span class="input-suffix">%</span>
+            </div>
+            <span class="field-error">Bitte gib deinen Quota-Schnitt an.</span>
+          </div>
+          <div class="field">
+            <label>Ø ACV / Deal-Größe</label>
+            <input type="text" name="acv" placeholder="z.B. 25.000 €">
+          </div>
+          <div class="field">
+            <label>Typischer Sales-Cycle</label>
+            <select name="sales_cycle">
+              <option value="" disabled selected>Auswählen…</option>
+              <option>< 2 Wochen</option>
+              <option>2–6 Wochen</option>
+              <option>1–3 Monate</option>
+              <option>3–6 Monate</option>
+              <option>6–12 Monate</option>
+              <option>12+ Monate</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Rarity self-assessment -->
+        <div class="field" style="margin-top:16px;">
+          <label>Selbsteinschätzung: Dein Rarity-Tier</label>
+          <div class="rarity-chips" id="rarity-chips">
+            <input type="hidden" name="rarity_tier" id="rarity-hidden" value="">
+            <button type="button" class="rarity-chip" onclick="selectChip(this,'common')">⚔️ COMMON</button>
+            <button type="button" class="rarity-chip" onclick="selectChip(this,'rare')">💎 RARE</button>
+            <button type="button" class="rarity-chip" onclick="selectChip(this,'epic')">🔮 EPIC</button>
+            <button type="button" class="rarity-chip" onclick="selectChip(this,'legendary')">👑 LEGENDARY</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 4: METHODIK & TOOLS ── -->
+      <div class="form-section">
+        <div class="form-section-label">
+          <span class="num">4</span>
+          Methodik & Tools
+        </div>
+        <div class="field-grid-2">
+          <div class="field">
+            <label>Sales-Methodik</label>
+            <input type="text" name="methodik" placeholder="z.B. MEDDIC, Challenger, SPIN…">
+          </div>
+          <div class="field">
+            <label>CRM & Tools</label>
+            <input type="text" name="crm_tools" placeholder="z.B. Salesforce, HubSpot, Outreach…">
+          </div>
+          <div class="field field-full">
+            <label>Kurze Sales-DNA: Was macht dich besonders?</label>
+            <textarea name="sales_dna" placeholder="z.B. Ich bin Hunter durch und durch. Mein Superpower ist Enterprise-Discovery und das Aufbrechen komplexer Buying Committees. President's Club 2022 & 2023…" rows="4"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 5: WUNSCH & KONDITIONEN ── -->
+      <div class="form-section">
+        <div class="form-section-label">
+          <span class="num">5</span>
+          Wunsch-Konditionen
+        </div>
+        <div class="field-grid-3">
+          <div class="field">
+            <label>Wunsch-OTE</label>
+            <input type="text" name="wunsch_ote" placeholder="z.B. 120–160k €">
+          </div>
+          <div class="field">
+            <label>Remote-Präferenz</label>
+            <select name="remote">
+              <option value="" disabled selected>Auswählen…</option>
+              <option>Fully Remote</option>
+              <option>Hybrid (1–2 Tage Büro)</option>
+              <option>Hybrid (3+ Tage Büro)</option>
+              <option>Onsite / Kein Remote nötig</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Verfügbarkeit</label>
+            <select name="verfuegbarkeit">
+              <option value="" disabled selected>Auswählen…</option>
+              <option>Sofort verfügbar</option>
+              <option>In 1 Monat</option>
+              <option>In 2–3 Monaten</option>
+              <option>In 4–6 Monaten</option>
+              <option>Nur passiv offen</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Standort / Region</label>
+            <input type="text" name="standort" placeholder="z.B. München, DACH, Remote DE">
+          </div>
+          <div class="field field-full">
+            <label>Sprachkenntnisse</label>
+            <input type="text" name="sprachen" placeholder="z.B. Deutsch (Muttersprachler), Englisch (C1), Französisch (B1)">
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 6: DATEIANHANG ── -->
+      <div class="form-section">
+        <div class="form-section-label">
+          <span class="num">6</span>
+          Track-Record-Dokumente
+        </div>
+        <p style="font-size:14px; color:var(--text2); margin-bottom:20px; line-height:1.65;">
+          Lade Belege hoch: <strong style="color:var(--text);">Quota-Screenshots, Zertifikate, President's Club Belege, Lebenslauf</strong>. Je mehr Beweise, desto besser deine Chancen.
+        </p>
+
+        <div class="file-drop-zone" id="drop-zone">
+          <input type="file" name="dokumente" id="file-input" multiple
+            accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx,.pptx">
+          <div class="drop-icon">📎</div>
+          <div class="drop-title">Dateien hier ablegen</div>
+          <div class="drop-sub">oder <span>klicken zum Auswählen</span></div>
+          <div style="margin-top:8px; font-size:11px; color:var(--text3);">PDF, PNG, JPG, DOCX, XLSX — max. 10 MB pro Datei</div>
+        </div>
+
+        <div class="file-list" id="file-list"></div>
+      </div>
+
+      <!-- ── SECTION 7: DATENSCHUTZ ── -->
+      <div class="form-section">
+        <div class="field" id="field-consent">
+          <div class="consent-row">
+            <input type="checkbox" id="consent" name="datenschutz" required>
+            <label for="consent" class="consent-text" style="text-transform:none; font-weight:400; font-size:13px; letter-spacing:0;">
+              Ich stimme zu, dass meine Daten zum Zweck der Kandidatenprüfung und Jobvermittlung durch alleyoop SaaS gespeichert und verarbeitet werden. Meine Daten werden nicht an Dritte weitergegeben. Mehr in der <a href="#">Datenschutzerklärung</a>.
+            </label>
+          </div>
+          <span class="field-error" style="margin-top:8px;">Bitte stimme der Datenschutzerklärung zu.</span>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="form-submit-area">
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <div class="spinner" id="spinner"></div>
+          <span id="submit-label">⚡ Track Record einreichen</span>
+        </button>
+        <p class="submit-note">
+          🔒 Absolute Diskretion. Ich melde mich nur bei einem echten Match.
+          <br><span>Kein Spam. Versprochen.</span>
+        </p>
+      </div>
+
+    </div><!-- /form-card -->
+  </form>
+</main>
+
+<script>
+// ─── RARITY CHIP SELECTOR ───────────────────────
+function selectChip(el, rarity) {
+  document.querySelectorAll('.rarity-chip').forEach(c => {
+    c.className = 'rarity-chip';
+  });
+  el.classList.add('selected-' + rarity);
+  document.getElementById('rarity-hidden').value = rarity.toUpperCase();
+}
+
+// ─── FILE UPLOAD ────────────────────────────────
+const dropZone   = document.getElementById('drop-zone');
+const fileInput  = document.getElementById('file-input');
+const fileList   = document.getElementById('file-list');
+let selectedFiles = [];
+
+function renderFileList() {
+  fileList.innerHTML = selectedFiles.map((f, i) => `
+    <div class="file-item">
+      <div class="file-item-name">
+        <span class="icon">📄</span>
+        <span>${f.name} <span style="color:var(--text3);">(${(f.size/1024/1024).toFixed(1)} MB)</span></span>
+      </div>
+      <button type="button" class="file-remove" onclick="removeFile(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function removeFile(index) {
+  selectedFiles.splice(index, 1);
+  renderFileList();
+  // Rebuild DataTransfer for the input
+  const dt = new DataTransfer();
+  selectedFiles.forEach(f => dt.items.add(f));
+  fileInput.files = dt.files;
+}
+
+fileInput.addEventListener('change', () => {
+  Array.from(fileInput.files).forEach(f => selectedFiles.push(f));
+  renderFileList();
+});
+
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  Array.from(e.dataTransfer.files).forEach(f => selectedFiles.push(f));
+  const dt = new DataTransfer();
+  selectedFiles.forEach(f => dt.items.add(f));
+  fileInput.files = dt.files;
+  renderFileList();
+});
+
+// ─── PROGRESS BAR ───────────────────────────────
+const fields = ['name','email','rolle','quota_attainment'];
+const totalRequired = fields.length + 1; // +1 for consent
+
+function updateProgress() {
+  const form = document.getElementById('kandidaten-form');
+  let filled = 0;
+  fields.forEach(name => {
+    const el = form.querySelector(`[name="${name}"]`);
+    if (el && el.value.trim()) filled++;
+  });
+  const consent = form.querySelector('#consent');
+  if (consent && consent.checked) filled++;
+  const pct = Math.round((filled / totalRequired) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+document.getElementById('kandidaten-form').addEventListener('input', updateProgress);
+document.getElementById('kandidaten-form').addEventListener('change', updateProgress);
+
+// ─── FORM VALIDATION & SUBMIT ───────────────────
+document.getElementById('kandidaten-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  // Clear old errors
+  document.querySelectorAll('.field').forEach(f => f.classList.remove('has-error'));
+
+  let valid = true;
+  const data = new FormData(this);
+
+  // Validate name
+  if (!data.get('name').trim()) {
+    document.getElementById('field-name').classList.add('has-error');
+    valid = false;
+  }
+  // Validate email
+  const emailVal = data.get('email').trim();
+  if (!emailVal || !emailVal.includes('@')) {
+    document.getElementById('field-email').classList.add('has-error');
+    valid = false;
+  }
+  // Validate role
+  if (!data.get('rolle')) {
+    document.getElementById('field-role').classList.add('has-error');
+    valid = false;
+  }
+  // Validate quota
+  if (!data.get('quota_attainment').trim()) {
+    document.getElementById('field-quota').classList.add('has-error');
+    valid = false;
+  }
+  // Validate consent
+  if (!document.getElementById('consent').checked) {
+    document.getElementById('field-consent').classList.add('has-error');
+    valid = false;
+  }
+
+  if (!valid) {
+    // Scroll to first error
+    const firstError = document.querySelector('.has-error');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Submit state
+  const btn = document.getElementById('submit-btn');
+  const spinner = document.getElementById('spinner');
+  const label = document.getElementById('submit-label');
+
+  btn.disabled = true;
+  spinner.style.display = 'block';
+  label.textContent = 'Wird gesendet…';
+
+  try {
+    // Attach files to FormData
+    selectedFiles.forEach(file => data.append('dokumente', file));
+
+    const response = await fetch(this.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      document.getElementById('success-overlay').classList.add('active');
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (err) {
+    btn.disabled = false;
+    spinner.style.display = 'none';
+    label.textContent = '⚡ Track Record einreichen';
+    alert('Fehler beim Senden. Bitte versuche es erneut oder schreib direkt an recruiting@alleyoop-saas.de');
+  }
+});
+</script>
+</body>
+</html>
